@@ -544,11 +544,12 @@ a { color: var(--acid); text-decoration: none; }
 .bigstat {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(36px, 4.2vw, 52px);
+  font-size: clamp(30px, 3.3vw, 42px);
   letter-spacing: -0.03em;
   line-height: 1;
   color: var(--text-h);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* Sparkline / chart helpers */
@@ -636,6 +637,110 @@ a { color: var(--acid); text-decoration: none; }
 .peri { color: var(--peri); }
 .amber { color: var(--amber); }
 .critical { color: var(--critical); }
+
+/* ── Leaflet overrides ───────────────────────────────────────── */
+.leaflet-container {
+  background: #070912 !important;
+  font-family: var(--sans) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(7, 9, 18, 0.7) !important;
+  color: var(--text-dim) !important;
+  font-size: 10px !important;
+  border-radius: 6px 0 0 0;
+  padding: 2px 8px !important;
+}
+.leaflet-control-attribution a { color: var(--text-muted) !important; }
+
+.leaflet-tooltip.dc-tooltip,
+.leaflet-tooltip {
+  background: rgba(15, 17, 28, 0.95) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  color: var(--text) !important;
+  font-family: var(--sans) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
+  backdrop-filter: blur(8px);
+}
+.leaflet-tooltip::before { display: none !important; }
+.leaflet-tooltip-top::before { display: none !important; }
+
+/* DC + human emoji pins (via leaflet divIcon) */
+.dc-pin-wrap { background: transparent !important; border: none !important; }
+.dc-pin {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.dc-pin-ring {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 22%, transparent);
+  border: 1.5px solid var(--c);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--c) 60%, transparent),
+    0 0 0 5px color-mix(in srgb, var(--c) 10%, transparent);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.dc-pin.is-selected .dc-pin-ring {
+  border-color: #fff;
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--c) 80%, transparent),
+    0 0 0 4px rgba(255,255,255,0.18),
+    0 0 0 8px color-mix(in srgb, var(--c) 18%, transparent);
+  transform: scale(1.08);
+}
+.dc-pin:hover .dc-pin-ring { transform: scale(1.1); }
+.dc-pin-emoji {
+  position: relative;
+  z-index: 2;
+  font-size: 15px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+  user-select: none;
+}
+
+.human-pin {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.human-pin-ring {
+  position: absolute;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(124, 141, 255, 0.18);
+  border: 1.5px solid #7C8DFF;
+  box-shadow:
+    0 0 12px rgba(124, 141, 255, 0.6),
+    0 0 0 5px rgba(124, 141, 255, 0.1);
+  animation: human-pulse 2.4s ease-in-out infinite;
+}
+.human-pin-emoji {
+  position: relative;
+  z-index: 2;
+  font-size: 18px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+  user-select: none;
+}
+@keyframes human-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(124, 141, 255, 0.6), 0 0 0 5px rgba(124, 141, 255, 0.1); }
+  50%      { box-shadow: 0 0 18px rgba(124, 141, 255, 0.8), 0 0 0 10px rgba(124, 141, 255, 0.05); }
+}
+
+/* Dashed route line animation */
+.route-line {
+  animation: dash-flow 1.4s linear infinite;
+}
+@keyframes dash-flow {
+  to { stroke-dashoffset: -28; }
+}
+
+/* Leaflet pane glow for circle markers (subtle radial glow already baked into markers) */
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
